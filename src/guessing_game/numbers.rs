@@ -1,6 +1,6 @@
-use std::io;
 use rand::Rng;
 use std::cmp::Ordering;
+use std::io;
 
 #[derive(Debug)]
 pub struct Game {
@@ -21,7 +21,9 @@ impl Game {
 impl super::GameTrait for Game {
     fn ask(&mut self) {
         let mut my_guess = String::new();
-        io::stdin().read_line(&mut my_guess).expect("some io::stdin error happened");
+        io::stdin()
+            .read_line(&mut my_guess)
+            .expect("some io::stdin error happened");
         self.guess = match my_guess.trim().parse() {
             Ok(num) => Some(num),
             Err(_) => None,
@@ -29,10 +31,13 @@ impl super::GameTrait for Game {
     }
 
     fn compare(&self) -> Result<bool, &str> {
-        match self.secret.cmp(&self.guess.expect("Cannot determine guess")) {
-            Ordering::Less => { Err("lower") } 
-            Ordering::Greater => { Err("higher") } 
-            Ordering::Equal => Ok(true)
+        match self
+            .secret
+            .cmp(&self.guess.expect("Cannot determine guess"))
+        {
+            Ordering::Less => Err("lower"),
+            Ordering::Greater => Err("higher"),
+            Ordering::Equal => Ok(true),
         }
     }
 }

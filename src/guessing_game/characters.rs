@@ -1,5 +1,5 @@
-use std::io;
 use rand::Rng;
+use std::io;
 
 const CHARSET: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
 
@@ -10,20 +10,22 @@ pub struct Game {
 }
 
 impl Game {
-  // constructor method to return a new Game with a random charactor set as secret
-  pub fn build() -> Self {
-    let i = rand::thread_rng().gen_range(0..CHARSET.len());
-      Game {
-          secret: char::from(CHARSET[i]),
-          guess: None
-      }
-  }
+    // constructor method to return a new Game with a random charactor set as secret
+    pub fn build() -> Self {
+        let i = rand::thread_rng().gen_range(0..CHARSET.len());
+        Game {
+            secret: char::from(CHARSET[i]),
+            guess: None,
+        }
+    }
 }
 
 impl super::GameTrait for Game {
     fn ask(&mut self) {
         let mut my_guess = String::new();
-        io::stdin().read_line(&mut my_guess).expect("some io::stdin error happened");
+        io::stdin()
+            .read_line(&mut my_guess)
+            .expect("some io::stdin error happened");
         self.guess = match my_guess.trim().parse() {
             Ok(char) => Some(char),
             Err(_) => None,
@@ -31,7 +33,7 @@ impl super::GameTrait for Game {
     }
 
     fn compare(&self) -> Result<bool, &str> {
-        if self.secret == self.guess.expect("Guss cannot be determined") {
+        if self.secret == self.guess.expect("Guess cannot be determined") {
             Ok(true)
         } else {
             Err("wrong character")
