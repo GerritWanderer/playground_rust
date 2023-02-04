@@ -40,7 +40,10 @@ pub fn start() -> Box<dyn GameTrait> {
         // otherwise print the error message and start again
         match result {
             Ok(game) => break game,
-            Err(message) => println!("{message}")
+            Err(message) => {
+                println!("{message}");
+                continue
+            }
         }
     }
 }
